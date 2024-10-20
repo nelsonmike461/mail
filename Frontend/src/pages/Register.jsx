@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
+  const [confirmation, setConfirmation] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -17,7 +17,7 @@ function Register() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password, confirmation: confirm }),
+        body: JSON.stringify({ email, password, confirmation }),
       });
 
       if (!response.ok) {
@@ -61,12 +61,12 @@ function Register() {
             />
           </div>
           <div>
-            <label htmlFor="confirm">Confirm Password</label>
+            <label htmlFor="confirmation">Confirm Password</label>
             <input
               type="password"
-              id="confirm" // Ensure this ID is unique
-              value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
+              id="confirmation"
+              value={confirmation}
+              onChange={(e) => setConfirmation(e.target.value)}
               required
             />
           </div>

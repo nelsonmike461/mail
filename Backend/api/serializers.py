@@ -31,6 +31,7 @@ class LogoutSerializer(serializers.Serializer):
 class EmailSerializer(serializers.ModelSerializer):
     sender = serializers.EmailField(source='sender.email')
     recipients = serializers.SerializerMethodField()
+    timestamp = serializers.SerializerMethodField()
 
     class Meta:
         model = Email
@@ -38,3 +39,6 @@ class EmailSerializer(serializers.ModelSerializer):
 
     def get_recipients(self, obj):
         return [recipient.email for recipient in obj.recipients.all()]
+
+    def get_timestamp(self, obj):
+        return obj.timestamp.strftime("%b %d %Y, %I:%M %p")

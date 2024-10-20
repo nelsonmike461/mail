@@ -8,6 +8,10 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import HomePage from "./pages/HomePage";
 import { useAuth } from "./context/AuthProvider";
+import Inbox from "./components/Inbox";
+import Sent from "./components/Sent";
+import Archive from "./components/Archive";
+import ComposeForm from "./components/ComposeForm";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -24,6 +28,10 @@ function App() {
           element={!isAuthenticated ? <Login /> : <Navigate to="/" />}
         />
         <Route path="/register" element={<Register />} />
+        <Route path="/inbox" element={<Inbox />} />
+        <Route path="/sent" element={<Sent />} />
+        <Route path="/archive" element={<Archive />} />
+        <Route path="/compose" element={<ComposeForm />} />
       </Routes>
     </Router>
   );

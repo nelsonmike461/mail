@@ -1,21 +1,42 @@
-import React from "react";
-import LogoutButton from "../components/LogoutButton";
+import React, { useState } from "react";
+import Footer from "../components/Footer";
+import Navigation from "../components/Navigation";
+import Header from "../components/Header";
+import Inbox from "../components/Inbox";
+import ComposeForm from "../components/ComposeForm";
+import Sent from "../components/Sent";
+import Archive from "../components/Archive";
+import { useAuth } from "../context/AuthProvider";
 
 function HomePage() {
+  const { isAuthenticated } = useAuth();
+  const [currentView, setCurrentView] = useState("inbox");
+
+  const renderView = () => {
+    switch (currentView) {
+      case "inbox":
+        return <Inbox />;
+      case "sent":
+        return <Sent />;
+      case "archive":
+        return <Archive />;
+      case "compose":
+        return <ComposeForm />;
+      default:
+        return <Inbox />;
+    }
+  };
+
   return (
     <div>
-      HomePage <LogoutButton />
+      <Header />
+      <Navigation setCurrentView={setCurrentView} />
+      <div>
+        {renderView()} {/* Render the current view here */}
+      </div>
+      <Footer />
     </div>
   );
 }
 
 export default HomePage;
-
-// const token = localStorage.getItem("token");
-
-// const response = await fetch("http://127.0.0.1:8000/api/protected-route/", {
-//   method: "GET",
-//   headers: {
-//     "Authorization": `Bearer ${token}`, // Include the token in the Authorization header
-//   },
-// });

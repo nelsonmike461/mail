@@ -6,11 +6,14 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false); // Added loading state
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null); // Clear error on submit
+    setLoading(true); // Set loading to true
 
     try {
       const response = await fetch(`http://127.0.0.1:8000/api/login/`, {
@@ -29,11 +32,14 @@ function Login() {
       const data = await response.json();
       localStorage.setItem("accessToken", data.access); // Store the access token
       localStorage.setItem("refreshToken", data.refresh); // Store the refresh token
+      localStorage.setItem("userEmail", email); // Store the user email
       login(); // Update auth state
       navigate("/"); // Redirect to homepage
     } catch (err) {
       setError(err.message); // Set the error message to display
       console.error("Error:", err);
+    } finally {
+      setLoading(false); // Reset loading state
     }
   };
 
@@ -49,7 +55,10 @@ function Login() {
               id="email"
               autoComplete="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setError(null); // Clear error when typing
+              }}
               required
             />
           </div>
@@ -59,11 +68,16 @@ function Login() {
               type="password"
               id="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError(null); // Clear error when typing
+              }}
               required
             />
           </div>
-          <button type="submit">Login</button>
+          <button type="submit" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
         </fieldset>
       </form>
       {error && <p>{error}</p>} {/* Display error message if present */}
