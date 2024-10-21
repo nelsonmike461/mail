@@ -30,8 +30,8 @@ function HomePage() {
   return (
     <div>
       <Header />
-      <Navigation setCurrentView={setCurrentView} />
-      <div>
+      <Navigation setCurrentView={setCurrentView} currentView={currentView} />
+      <div className="flex flex-column justify-center pt-1">
         {renderView()} {/* Render the current view here */}
       </div>
       <Footer />

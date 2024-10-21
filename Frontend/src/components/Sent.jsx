@@ -40,17 +40,24 @@ function Sent() {
   }
 
   return (
-    <table>
-      <tbody>
+    <div className="flex justify-center w-full max-w-xl ">
+      <div className="w-full max-w-xl p-4 space-y-2">
+        {" "}
+        {/* Increased max width */}
         {emails.map((email) => (
-          <tr key={email.id}>
-            <td>{email.sender}</td>
-            <td>{email.subject}</td>
-            <td>{email.timestamp}</td>
-          </tr>
+          <div
+            key={email.id}
+            className="flex justify-between items-center p-3 bg-gray-200 rounded-lg shadow"
+          >
+            <div className="flex-1 flex items-center">
+              <div className="font-semibold text-sm">{email.sender}</div>
+              <div className="mx-10 text-gray-700 text-sm">{email.subject}</div>
+            </div>
+            <div className="text-gray-500 text-sm">{email.timestamp}</div>
+          </div>
         ))}
-      </tbody>
-    </table>
+      </div>
+    </div>
   );
 }
 

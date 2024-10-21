@@ -1,14 +1,25 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
-function Navigation({ setCurrentView }) {
+function Navigation({ setCurrentView, currentView }) {
   return (
-    <nav>
-      <ul>
-        <li onClick={() => setCurrentView("inbox")}>Inbox</li>
-        <li onClick={() => setCurrentView("sent")}>Sent</li>
-        <li onClick={() => setCurrentView("compose")}>Compose</li>
-        <li onClick={() => setCurrentView("archive")}>Archive</li>
+    <nav className="bg-gray-200">
+      <ul className="flex flex-row justify-center space-x-14 pt-1">
+        {["inbox", "sent", "compose", "archive"].map((view) => (
+          <li
+            key={view}
+            onClick={() => setCurrentView(view)}
+            className={`relative cursor-pointer py-2 ${
+              currentView === view ? "text-gray-800" : "text-gray-600"
+            }`}
+          >
+            <span className="hover:bg-gray-300 transition block">
+              {view.charAt(0).toUpperCase() + view.slice(1)}
+            </span>
+            {currentView === view && (
+              <div className="absolute left-0 right-0 bottom-0 h-1 bg-gray-800"></div>
+            )}
+          </li>
+        ))}
       </ul>
     </nav>
   );

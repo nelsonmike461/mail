@@ -9,7 +9,7 @@ from .models import Email
 import json
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.hashers import check_password
-
+from rest_framework_simplejwt.views import TokenRefreshView
 User = get_user_model()
 
 
@@ -166,3 +166,8 @@ class RegisterView(APIView):
             user = serializer.save()
             return Response({"message": "User registered successfully."}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class TokenRefreshView(TokenRefreshView):
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)

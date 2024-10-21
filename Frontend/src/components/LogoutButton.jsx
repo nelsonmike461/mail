@@ -22,10 +22,6 @@ const LogoutButton = () => {
         throw new Error(errorData.error || "Logout failed");
       }
 
-      // Clear tokens
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-
       // Update auth state
       logout(); // Call logout to update state
 
@@ -37,7 +33,11 @@ const LogoutButton = () => {
     }
   };
 
-  return <button onClick={handleLogout}>Logout</button>;
+  return (
+    <button className="pr-2  hover:text-red-500" onClick={handleLogout}>
+      Logout
+    </button>
+  );
 };
 
 export default LogoutButton;

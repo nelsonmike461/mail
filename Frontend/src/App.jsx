@@ -12,6 +12,7 @@ import Inbox from "./components/Inbox";
 import Sent from "./components/Sent";
 import Archive from "./components/Archive";
 import ComposeForm from "./components/ComposeForm";
+import "./index.css";
 
 function App() {
   const { isAuthenticated } = useAuth();

@@ -14,7 +14,7 @@ function ComposeForm() {
     } else {
       setError("User email not found. Please log in again.");
     }
-  });
+  }, []); // Ensure this runs only on mount
 
   const sendMail = async (e) => {
     e.preventDefault();
@@ -37,51 +37,84 @@ function ComposeForm() {
         throw new Error(errorData.error || "Mail Not Sent");
       }
       console.log("Mail sent successfully!");
+      // Clear the form after sending
+      setRecipients("");
+      setSubject("");
+      setBody("");
     } catch (err) {
       setError(err.message); // Set the error message to display
       console.error("Error:", err);
     }
   };
+
   return (
-    <form onSubmit={sendMail} aria-label="Compose Email Form">
-      <fieldset>
-        <div>
-          <label htmlFor="from">From</label>
-          <input type="email" id="from" value={from} disabled readOnly />
-        </div>
-        <div>
-          <label htmlFor="recipients">To</label>
-          <input
-            type="email"
-            id="recipients"
-            value={recipients}
-            onChange={(e) => setRecipients(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <input
-            type="text"
-            id="subject"
-            value={subject}
-            placeholder="Subject"
-            onChange={(e) => setSubject(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <textarea
-            id="body"
-            placeholder="Body"
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Send</button>
-        {error && <p>{error}</p>} {/* Display error message if present */}
-      </fieldset>
-    </form>
+    <div className="p-6 bg-white shadow-md rounded-lg w-full max-w-lg mx-auto">
+      <form onSubmit={sendMail} aria-label="Compose Email Form">
+        <fieldset className="space-y-4">
+          <div className="flex items-center space-x-3">
+            <label htmlFor="from" className="font-medium">
+              From:
+            </label>
+            <input
+              type="email"
+              id="from"
+              value={from}
+              disabled
+              readOnly
+              className="flex-1 border border-gray-300 p-2 rounded"
+            />
+          </div>
+          <div>
+            <label htmlFor="recipients" className="block font-medium">
+              To:
+            </label>
+            <input
+              type="email"
+              id="recipients"
+              value={recipients}
+              onChange={(e) => setRecipients(e.target.value)}
+              required
+              className="w-full border border-gray-300 p-2 rounded"
+            />
+          </div>
+          <div>
+            <label htmlFor="subject" className="block font-medium">
+              Subject:
+            </label>
+            <input
+              type="text"
+              id="subject"
+              value={subject}
+              placeholder="Subject"
+              onChange={(e) => setSubject(e.target.value)}
+              required
+              className="w-full border border-gray-300 p-2 rounded"
+            />
+          </div>
+          <div>
+            <label htmlFor="body" className="block font-medium">
+              Body:
+            </label>
+            <textarea
+              id="body"
+              placeholder="Body"
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              required
+              className="w-full border border-gray-300 p-2 rounded h-32" // Set a specific height for the textarea
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
+          >
+            Send
+          </button>
+          {error && <p className="text-red-500 mt-2">{error}</p>}{" "}
+          {/* Display error message if present */}
+        </fieldset>
+      </form>
+    </div>
   );
 }
 
