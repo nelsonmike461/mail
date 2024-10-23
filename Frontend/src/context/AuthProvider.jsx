@@ -6,7 +6,7 @@ export const AuthProvider = ({ children }) => {
   const isTokenExpired = (token) => {
     if (!token) return true;
     const payload = JSON.parse(atob(token.split(".")[1]));
-    return payload.exp * 1000 < Date.now();
+    return payload.exp * 2000 < Date.now();
   };
 
   const refreshAccessToken = async () => {
@@ -38,11 +38,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const checkToken = () => {
+  const checkToken = async () => {
     const token = localStorage.getItem("accessToken");
     if (!token || isTokenExpired(token)) {
       console.log("Access token expired, attempting to refresh...");
-      refreshAccessToken();
+      await refreshAccessToken(); // Wait for refresh to complete
     } else {
       console.log("Access token is valid");
     }

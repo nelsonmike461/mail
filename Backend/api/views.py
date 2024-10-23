@@ -27,20 +27,20 @@ class EmailDetailView(APIView):
     def put(self, request, email_id):
         try:
             email = Email.objects.get(Q(sender=request.user) | Q(recipients=request.user), pk=email_id)
+            
+            # If the user is a recipient, mark the email as read
+            if request.user in email.recipients.all():
+                email.read = True  # You may want to implement more complex logic for individual read states
+            
+            # Handle archiving
+            archived = request.data.get('archived')
+            if archived is not None:
+                email.archived = archived
+            
+            email.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
         except Email.DoesNotExist:
             return Response({'error': 'Email not found.'}, status=status.HTTP_404_NOT_FOUND)
-
-        # Use request.data instead of manually loading from request.body
-        read = request.data.get('read')
-        archived = request.data.get('archived')
-
-        if read is not None:
-            email.read = read
-        if archived is not None:
-            email.archived = archived
-
-        email.save()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class ComposeEmailView(APIView):
     permission_classes = [IsAuthenticated]
@@ -147,6 +147,7 @@ class LogoutView(APIView):
             RefreshToken(token).blacklist()  # Blacklist the token
             return Response({"message": "Logout successful."}, status=status.HTTP_200_OK)
         return Response({"error": "Refresh token required."}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class RegisterView(APIView):
     def post(self, request):

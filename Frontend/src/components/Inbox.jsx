@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import EmailDetails from "./EmailDetails";
 
 function Inbox() {
   const [emails, setEmails] = useState([]);
   const [error, setError] = useState(null);
+  const [selectedEmailId, setSelectedEmailId] = useState(null);
 
   const fetchEmails = async () => {
     try {
@@ -29,6 +31,33 @@ function Inbox() {
     }
   };
 
+  const handleEmailClick = async (id) => {
+    setSelectedEmailId(id); // Set the selected email ID when clicked
+
+    try {
+      const token = localStorage.getItem("accessToken");
+
+      // Mark as read
+      await fetch(`http://127.0.0.1:8000/api/emails/${id}/`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ read: true }), // Mark email as read
+      });
+
+      // Remove from local state
+      setEmails((prevEmails) => prevEmails.filter((email) => email.id !== id));
+    } catch (err) {
+      console.error("Error updating email:", err);
+    }
+  };
+
+  const handleCloseDetails = () => {
+    setSelectedEmailId(null); // Clear the selected email ID
+  };
+
   useEffect(() => {
     fetchEmails();
   }, []);
@@ -38,23 +67,39 @@ function Inbox() {
   }
 
   return (
-    <div className="flex justify-center w-full max-w-xl ">
-      <div className="w-full max-w-xl p-4 space-y-2">
-        {" "}
-        {/* Increased max width */}
-        {emails.map((email) => (
-          <div
-            key={email.id}
-            className="flex justify-between items-center p-3 bg-gray-200 rounded-lg shadow"
-          >
-            <div className="flex-1 flex items-center">
-              <div className="font-semibold text-sm">{email.sender}</div>
-              <div className="mx-10 text-gray-700 text-sm">{email.subject}</div>
+    <div className="flex justify-center w-full max-w-xl">
+      {selectedEmailId ? (
+        <EmailDetails
+          id={selectedEmailId}
+          onClose={handleCloseDetails}
+          onArchive={() => {
+            setEmails((prevEmails) =>
+              prevEmails.filter((email) => email.id !== selectedEmailId)
+            ); // Remove email from local state
+            handleCloseDetails(); // Close email details
+          }} // Pass the onArchive callback
+        />
+      ) : (
+        <div className="w-full max-w-xl p-4 space-y-2">
+          {emails.map((email) => (
+            <div
+              key={email.id}
+              onClick={() => handleEmailClick(email.id)}
+              className={`flex justify-between items-center p-3 rounded-lg shadow cursor-pointer ${
+                email.read ? "bg-white" : "bg-gray-200"
+              }`}
+            >
+              <div className="flex-1 flex items-center">
+                <div className="font-semibold text-sm">{email.sender}</div>
+                <div className="mx-10 text-gray-700 text-sm">
+                  {email.subject}
+                </div>
+              </div>
+              <div className="text-gray-500 text-sm">{email.timestamp}</div>
             </div>
-            <div className="text-gray-500 text-sm">{email.timestamp}</div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
