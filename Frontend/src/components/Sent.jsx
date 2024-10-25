@@ -24,9 +24,7 @@ function Sent() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(
-          errorData.error || "Fetching emails that were sent failed"
-        );
+        throw new Error(errorData.error || "Fetching sent emails failed");
       }
 
       const data = await response.json();
@@ -47,16 +45,14 @@ function Sent() {
         throw new Error("Access token is missing");
       }
 
+      // Mark as read (optional)
       await fetch(`http://127.0.0.1:8000/api/emails/${id}/`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ read: true }),
       });
-
-      setEmails((prevEmails) => prevEmails.filter((email) => email.id !== id));
     } catch (err) {
       console.error("Error updating email:", err);
     }
@@ -68,10 +64,14 @@ function Sent() {
 
   useEffect(() => {
     fetchEmails();
+
+    const intervalId = setInterval(fetchEmails, 5000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div className="text-red-600">Error: {error}</div>;
   }
 
   return (
@@ -80,25 +80,19 @@ function Sent() {
         <EmailDetails
           id={selectedEmailId}
           onClose={handleCloseDetails}
-          onArchive={() => {
-            setEmails((prevEmails) =>
-              prevEmails.filter((email) => email.id !== selectedEmailId)
-            ); // Remove email from local state
-            handleCloseDetails(); // Close email details
-          }}
-          showArchiveButton={false} // Hide the archive button in sent section
+          showArchiveButton={false}
         />
       ) : (
         <div className="w-full max-w-xl p-4 space-y-2">
           {emails.length === 0 ? (
-            <div>No sent emails available.</div>
+            <div className="flex justify-center">No sent emails available.</div>
           ) : (
             emails.map((email) => (
               <div
                 key={email.id}
                 onClick={() => handleEmailClick(email.id)}
                 className={`flex justify-between items-center p-3 rounded-lg shadow cursor-pointer ${
-                  email.read ? "bg-white" : "bg-gray-200"
+                  email.read ? "bg-white" : "bg-gray-300"
                 }`}
               >
                 <div className="flex-1 flex items-center">

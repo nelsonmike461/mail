@@ -14,7 +14,7 @@ function ComposeForm() {
     } else {
       setError("User email not found. Please log in again.");
     }
-  }, []); // Ensure this runs only on mount
+  }, []);
 
   const sendMail = async (e) => {
     e.preventDefault();
@@ -42,7 +42,7 @@ function ComposeForm() {
       setSubject("");
       setBody("");
     } catch (err) {
-      setError(err.message); // Set the error message to display
+      setError(err.message);
       console.error("Error:", err);
     }
   };
@@ -111,7 +111,6 @@ function ComposeForm() {
             Send
           </button>
           {error && <p className="text-red-500 mt-2">{error}</p>}{" "}
-          {/* Display error message if present */}
         </fieldset>
       </form>
     </div>

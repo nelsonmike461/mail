@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import ToggleArchiveButton from "./ToggleArchiveButton";
+import ToggleArchiveButton from "../buttons/ToggleArchiveButton";
 import ReplyForm from "./ReplyForm";
 
 function EmailDetails({ id, onClose, onArchive, showArchiveButton = true }) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
-  const [isReplying, setIsReplying] = useState(false); // State to manage reply form visibility
+  const [isReplying, setIsReplying] = useState(false);
 
   const fetchDetails = async () => {
     try {
@@ -42,7 +42,7 @@ function EmailDetails({ id, onClose, onArchive, showArchiveButton = true }) {
   }
 
   const handleReply = () => {
-    setIsReplying(true); // Open the reply form
+    setIsReplying(true);
   };
 
   return (
@@ -51,14 +51,25 @@ function EmailDetails({ id, onClose, onArchive, showArchiveButton = true }) {
         <ReplyForm email={data} onClose={onClose} />
       ) : (
         <>
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 text-gray-600 text-2xl"
-          >
-            &larr;
-          </button>
+          <div className="flex items-center justify-between mb-4">
+            <button
+              onClick={onClose}
+              className="text-gray-600 text-2xl hover:text-gray-800 transition"
+            >
+              &larr;
+            </button>
+            {showArchiveButton && (
+              <ToggleArchiveButton
+                emailId={id}
+                isArchived={data.archived}
+                onToggle={() => {
+                  onArchive();
+                }}
+              />
+            )}
+          </div>
           <h5 className="font-semibold text-lg">{data.subject}</h5>
-          <div className="mt-2">
+          <div className="mt-2 text-gray-600 text-sm">
             <div>
               <strong>From:</strong> {data.sender}
             </div>
@@ -66,27 +77,18 @@ function EmailDetails({ id, onClose, onArchive, showArchiveButton = true }) {
               <strong>To:</strong> {data.recipients.join(", ")}
             </div>
             <div>
-              <strong>Received:</strong> {data.timestamp}
+              <strong>Received:</strong>{" "}
+              {new Date(data.timestamp).toLocaleString()}
             </div>
           </div>
-          <div className="mt-4">{data.body}</div>
+          <div className="mt-4 whitespace-pre-wrap">{data.body}</div>
           <div className="mt-4 flex space-x-2">
             <button
               onClick={handleReply}
-              className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-gray-100 hover:text-black border hover:border-black transparent"
+              className="bg-blue-500 text-white px-3 py-1 rounded border border-transparent hover:bg-gray-100 hover:text-black hover:border-black text-sm transition"
             >
               Reply
             </button>
-            {showArchiveButton && (
-              <ToggleArchiveButton
-                emailId={id}
-                isArchived={data.archived}
-                onToggle={() => {
-                  onClose();
-                  onArchive();
-                }}
-              />
-            )}
           </div>
         </>
       )}

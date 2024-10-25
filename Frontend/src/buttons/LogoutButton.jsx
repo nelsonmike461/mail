@@ -1,8 +1,8 @@
-import { useAuth } from "../context/AuthProvider"; // Ensure you're importing useAuth
+import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 
 const LogoutButton = () => {
-  const { logout } = useAuth(); // Get the logout function
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -22,10 +22,8 @@ const LogoutButton = () => {
         throw new Error(errorData.error || "Logout failed");
       }
 
-      // Update auth state
-      logout(); // Call logout to update state
+      logout();
 
-      // Redirect to login page
       navigate("/login");
     } catch (err) {
       console.error("Error:", err);

@@ -10,9 +10,9 @@ function ToggleArchiveButton({ emailId, isArchived, onToggle }) {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ archived: !isArchived }), // Toggle the archived state
+        body: JSON.stringify({ archived: !isArchived }),
       });
-      onToggle(); // Call the onToggle function passed as a prop
+      onToggle();
     } catch (err) {
       console.error("Error toggling email archive state:", err);
     }
@@ -21,7 +21,7 @@ function ToggleArchiveButton({ emailId, isArchived, onToggle }) {
   return (
     <button
       onClick={handleToggleArchive}
-      className={`text-white px-2 text-sm rounded ${
+      className={`text-white px-2 py-1 text-sm rounded ${
         isArchived
           ? "bg-blue-500 border border-transparent hover:bg-gray-100 hover:text-black hover:border-black text-sm"
           : "bg-red-500 border border-transparent hover:bg-gray-100 hover:text-black hover:border-black text-sm"

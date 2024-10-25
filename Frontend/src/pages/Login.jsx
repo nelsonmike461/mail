@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
+import { Link } from "react-router-dom"; // Import Link
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -45,8 +46,6 @@ function Login() {
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
-      {" "}
-      {/* Full height, centered */}
       <form
         onSubmit={handleSubmit}
         aria-label="Login Form"
@@ -55,13 +54,12 @@ function Login() {
         <fieldset>
           <legend className="text-xl font-bold mb-4">Login</legend>
           <div className="mb-4">
-            <label htmlFor="email" className="block mb-1">
+            <label htmlFor="email" className="block mb-1 text-sm">
               Email
             </label>
             <input
               type="email"
               id="email"
-              autoComplete="email"
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -72,7 +70,7 @@ function Login() {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="password" className="block mb-1">
+            <label htmlFor="password" className="block mb-1 text-sm">
               Password
             </label>
             <input
@@ -90,13 +88,21 @@ function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-500 text-white p-2 rounded"
+            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-gray-100 hover:text-black border hover:border-black"
           >
             {loading ? "Logging in..." : "Login"}
           </button>
         </fieldset>
+        {error && (
+          <p className="flex text-red-500 mt-2 justify-center">{error}</p>
+        )}
+        <p className="mt-4 text-center text-sm">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-blue-500 underline">
+            Register here
+          </Link>
+        </p>
       </form>
-      {error && <p className="text-red-500 mt-2">{error}</p>}
     </div>
   );
 }

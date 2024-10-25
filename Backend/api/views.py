@@ -1,15 +1,16 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import UserSerializer, EmailSerializer, LoginSerializer, LogoutSerializer
-from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.db.models import Q
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
 from .models import Email
-import json
+from .serializers import UserSerializer, EmailSerializer, LoginSerializer, LogoutSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.hashers import check_password
 from rest_framework_simplejwt.views import TokenRefreshView
+import json
+
 User = get_user_model()
 
 
@@ -27,20 +28,19 @@ class EmailDetailView(APIView):
     def put(self, request, email_id):
         try:
             email = Email.objects.get(Q(sender=request.user) | Q(recipients=request.user), pk=email_id)
-            
             # If the user is a recipient, mark the email as read
             if request.user in email.recipients.all():
-                email.read = True  # You may want to implement more complex logic for individual read states
-            
+                email.read = True
+
             # Handle archiving
             archived = request.data.get('archived')
             if archived is not None:
                 email.archived = archived
-            
             email.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Email.DoesNotExist:
             return Response({'error': 'Email not found.'}, status=status.HTTP_404_NOT_FOUND)
+
 
 class ComposeEmailView(APIView):
     permission_classes = [IsAuthenticated]
@@ -66,7 +66,6 @@ class ComposeEmailView(APIView):
         subject = data.get('subject', '')
         body = data.get('body', '')
 
-        # Create a single email instance
         email = Email(
             user=request.user,
             sender=request.user,
@@ -79,9 +78,7 @@ class ComposeEmailView(APIView):
         for recipient in recipients:
             email.recipients.add(recipient)
         email.save()
-
-        # Log the recipients for debugging
-        print(f"Email sent to: {[user.email for user in recipients]}")
+        # print(f"Email sent to: {[user.email for user in recipients]}")
 
         # Serialize the created email instance
         serializer = EmailSerializer(email)
@@ -94,7 +91,6 @@ class MailBoxView(APIView):
 
     def get(self, request, mailbox):
         if mailbox == 'inbox':
-            # Update to filter by recipients
             emails = Email.objects.filter(recipients=request.user, archived=False)
         elif mailbox == 'sent':
             emails = Email.objects.filter(user=request.user, sender=request.user)
@@ -167,7 +163,7 @@ class RegisterView(APIView):
             user = serializer.save()
             return Response({"message": "User registered successfully."}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 class TokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):

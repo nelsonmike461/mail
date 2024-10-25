@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import LogoutButton from "./LogoutButton";
+import LogoutButton from "../buttons/LogoutButton";
 
 function Header() {
   const [user, setUser] = useState(null);

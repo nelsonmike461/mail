@@ -44,9 +44,9 @@ function ReplyForm({ email, onClose }) {
         throw new Error(errorData.error || "Mail Not Sent");
       }
       console.log("Reply sent successfully!");
-      onClose(); // Close the form after sending
+      onClose();
     } catch (err) {
-      setError(err.message); // Set the error message to display
+      setError(err.message);
       console.error("Error:", err);
     }
   };

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Footer from "../components/Footer";
+import Footer from "../stylecomponents/Footer";
 import Navigation from "../components/Navigation";
-import Header from "../components/Header";
+import Header from "../stylecomponents/Header";
 import Inbox from "../components/Inbox";
 import ComposeForm from "../components/ComposeForm";
 import Sent from "../components/Sent";
@@ -28,12 +28,10 @@ function HomePage() {
   };
 
   return (
-    <div>
+    <div className="bg-gray-100 min-h-screen">
       <Header />
       <Navigation setCurrentView={setCurrentView} currentView={currentView} />
-      <div className="flex flex-column justify-center pt-1">
-        {renderView()} {/* Render the current view here */}
-      </div>
+      <div className="flex flex-column justify-center pt-1">{renderView()}</div>
       <Footer />
     </div>
   );

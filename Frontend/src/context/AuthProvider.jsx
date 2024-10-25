@@ -6,13 +6,18 @@ export const AuthProvider = ({ children }) => {
   const isTokenExpired = (token) => {
     if (!token) return true;
     const payload = JSON.parse(atob(token.split(".")[1]));
-    return payload.exp * 2000 < Date.now();
+    return payload.exp * 1000 < Date.now();
   };
+
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const token = localStorage.getItem("accessToken");
+    return token && !isTokenExpired(token);
+  });
 
   const refreshAccessToken = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
     if (!refreshToken) {
-      logout(); // No refresh token, log out
+      logout();
       return;
     }
 
@@ -31,27 +36,21 @@ export const AuthProvider = ({ children }) => {
 
       const data = await response.json();
       localStorage.setItem("accessToken", data.access);
-      console.log("Access token refreshed:", data.access);
+      setIsAuthenticated(true);
     } catch (error) {
       console.error("Error refreshing token:", error);
-      logout(); // If refresh fails, log out
+      logout();
     }
   };
 
   const checkToken = async () => {
     const token = localStorage.getItem("accessToken");
     if (!token || isTokenExpired(token)) {
-      console.log("Access token expired, attempting to refresh...");
-      await refreshAccessToken(); // Wait for refresh to complete
+      await refreshAccessToken();
     } else {
-      console.log("Access token is valid");
+      setIsAuthenticated(true);
     }
   };
-
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    const token = localStorage.getItem("accessToken");
-    return token && !isTokenExpired(token);
-  });
 
   const login = () => {
     setIsAuthenticated(true);
@@ -65,10 +64,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const intervalId = setInterval(checkToken, 60000); // Check every minute
-    checkToken(); // Initial check on mount
+    checkToken();
+    const intervalId = setInterval(checkToken, 60000);
 
-    return () => clearInterval(intervalId); // Cleanup on unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   return (

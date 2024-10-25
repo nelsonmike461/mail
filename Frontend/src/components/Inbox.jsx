@@ -32,7 +32,7 @@ function Inbox() {
   };
 
   const handleEmailClick = async (id) => {
-    setSelectedEmailId(id); // Set the selected email ID when clicked
+    setSelectedEmailId(id);
 
     try {
       const token = localStorage.getItem("accessToken");
@@ -44,22 +44,35 @@ function Inbox() {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ read: true }), // Mark email as read
+        body: JSON.stringify({ read: true }),
       });
 
-      // Remove from local state
-      setEmails((prevEmails) => prevEmails.filter((email) => email.id !== id));
+      // Update local state to reflect the read status
+      setEmails((prevEmails) =>
+        prevEmails.map((email) =>
+          email.id === id ? { ...email, read: true } : email
+        )
+      );
     } catch (err) {
       console.error("Error updating email:", err);
     }
   };
 
   const handleCloseDetails = () => {
-    setSelectedEmailId(null); // Clear the selected email ID
+    setSelectedEmailId(null);
+  };
+
+  const handleArchive = (id) => {
+    setEmails((prevEmails) => prevEmails.filter((email) => email.id !== id));
+    handleCloseDetails();
   };
 
   useEffect(() => {
-    fetchEmails();
+    fetchEmails(); // Initial fetch
+
+    const intervalId = setInterval(fetchEmails, 5000); // Fetch emails every 10 seconds
+
+    return () => clearInterval(intervalId); // Clean up on unmount
   }, []);
 
   if (error) {
@@ -72,32 +85,33 @@ function Inbox() {
         <EmailDetails
           id={selectedEmailId}
           onClose={handleCloseDetails}
-          onArchive={() => {
-            setEmails((prevEmails) =>
-              prevEmails.filter((email) => email.id !== selectedEmailId)
-            ); // Remove email from local state
-            handleCloseDetails(); // Close email details
-          }} // Pass the onArchive callback
+          onArchive={() => handleArchive(selectedEmailId)}
         />
       ) : (
         <div className="w-full max-w-xl p-4 space-y-2">
-          {emails.map((email) => (
-            <div
-              key={email.id}
-              onClick={() => handleEmailClick(email.id)}
-              className={`flex justify-between items-center p-3 rounded-lg shadow cursor-pointer ${
-                email.read ? "bg-white" : "bg-gray-200"
-              }`}
-            >
-              <div className="flex-1 flex items-center">
-                <div className="font-semibold text-sm">{email.sender}</div>
-                <div className="mx-10 text-gray-700 text-sm">
-                  {email.subject}
-                </div>
-              </div>
-              <div className="text-gray-500 text-sm">{email.timestamp}</div>
+          {emails.length === 0 ? (
+            <div className="flex justify-center">
+              You haven't received any mails.
             </div>
-          ))}
+          ) : (
+            emails.map((email) => (
+              <div
+                key={email.id}
+                onClick={() => handleEmailClick(email.id)}
+                className={`flex justify-between items-center p-3 rounded-lg shadow cursor-pointer ${
+                  email.read ? "bg-white" : "bg-gray-300"
+                }`}
+              >
+                <div className="flex-1 flex items-center">
+                  <div className="font-semibold text-sm">{email.sender}</div>
+                  <div className="mx-10 text-gray-700 text-sm">
+                    {email.subject}
+                  </div>
+                </div>
+                <div className="text-gray-500 text-sm">{email.timestamp}</div>
+              </div>
+            ))
+          )}
         </div>
       )}
     </div>
