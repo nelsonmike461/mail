@@ -10,7 +10,7 @@ function EmailDetails({ id, onClose, onArchive, showArchiveButton = true }) {
   const fetchDetails = async () => {
     try {
       const token = localStorage.getItem("accessToken");
-      const response = await fetch(`http://127.0.0.1:8000/api/emails/${id}/`, {
+      const response = await fetch(`http://127.0.0.1:8000/api/emails/${id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

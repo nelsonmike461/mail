@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function ComposeForm() {
+function ComposeForm({ setCurrentView }) {
   const [recipients, setRecipients] = useState("");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [error, setError] = useState(null);
   const [from, setFrom] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const userEmail = localStorage.getItem("userEmail");
@@ -41,6 +44,7 @@ function ComposeForm() {
       setRecipients("");
       setSubject("");
       setBody("");
+      setCurrentView("sent");
     } catch (err) {
       setError(err.message);
       console.error("Error:", err);

@@ -4,7 +4,7 @@ function ToggleArchiveButton({ emailId, isArchived, onToggle }) {
   const handleToggleArchive = async () => {
     try {
       const token = localStorage.getItem("accessToken");
-      await fetch(`http://127.0.0.1:8000/api/emails/${emailId}/`, {
+      await fetch(`http://127.0.0.1:8000/api/emails/${emailId}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,

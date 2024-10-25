@@ -21,7 +21,7 @@ function HomePage() {
       case "archive":
         return <Archive />;
       case "compose":
-        return <ComposeForm />;
+        return <ComposeForm setCurrentView={setCurrentView} />;
       default:
         return <Inbox />;
     }

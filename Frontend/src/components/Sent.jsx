@@ -46,7 +46,7 @@ function Sent() {
       }
 
       // Mark as read (optional)
-      await fetch(`http://127.0.0.1:8000/api/emails/${id}/`, {
+      await fetch(`http://127.0.0.1:8000/api/emails/${id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
