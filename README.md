@@ -1,5 +1,7 @@
 # Mail
 
+### Django+React
+
 ## Description
 
 A Single-page email client that makes API calls with React.js
