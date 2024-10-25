@@ -4,9 +4,9 @@
 
 A Single-page email client that makes API calls with React.js
 
-# Specification
+## Specification
 
-1.Login, register and user.
+1.Login, register and Logout user.
 
 - ![Login](./static/Login.gif)
 
