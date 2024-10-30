@@ -19,7 +19,7 @@ function HomePage() {
       case "sent":
         return <Sent />;
       case "archive":
-        return <Archive />;
+        return <Archive setCurrentView={setCurrentView} />;
       case "compose":
         return <ComposeForm setCurrentView={setCurrentView} />;
       default:

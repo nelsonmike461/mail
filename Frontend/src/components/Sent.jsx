@@ -37,25 +37,6 @@ function Sent() {
 
   const handleEmailClick = async (id) => {
     setSelectedEmailId(id);
-
-    try {
-      const token = localStorage.getItem("accessToken");
-
-      if (!token) {
-        throw new Error("Access token is missing");
-      }
-
-      // Mark as read (optional)
-      await fetch(`http://127.0.0.1:8000/api/emails/${id}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-    } catch (err) {
-      console.error("Error updating email:", err);
-    }
   };
 
   const handleCloseDetails = () => {

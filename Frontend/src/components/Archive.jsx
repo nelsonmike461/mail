@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import EmailDetails from "./EmailDetails";
 
-function Archive() {
+function Archive({ setCurrentView }) {
   const [emails, setEmails] = useState([]);
   const [error, setError] = useState(null);
   const [selectedEmailId, setSelectedEmailId] = useState(null);
@@ -33,22 +33,6 @@ function Archive() {
 
   const handleEmailClick = async (id) => {
     setSelectedEmailId(id);
-
-    try {
-      const token = localStorage.getItem("accessToken");
-
-      // Mark as read (optional depending on your logic)
-      await fetch(`http://127.0.0.1:8000/api/emails/${id}/`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ read: true }),
-      });
-    } catch (err) {
-      console.error("Error marking email as read:", err);
-    }
   };
 
   const handleUnarchiveEmail = async (id) => {
@@ -66,6 +50,7 @@ function Archive() {
       // Remove from local state
       setEmails((prevEmails) => prevEmails.filter((email) => email.id !== id));
       handleCloseDetails();
+      setCurrentView("inbox");
     } catch (err) {
       console.error("Error unarchiving email:", err);
     }
