@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import ToggleArchiveButton from "../buttons/ToggleArchiveButton";
 import ReplyForm from "./ReplyForm";
 
-function EmailDetails({ id, onClose, onArchive, showArchiveButton = true }) {
+function EmailDetails({
+  id,
+  onClose,
+  onArchive,
+  setCurrentView,
+  showArchiveButton = true,
+}) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isReplying, setIsReplying] = useState(false);
@@ -50,7 +56,11 @@ function EmailDetails({ id, onClose, onArchive, showArchiveButton = true }) {
   return (
     <div className="p-4 border border-gray-300 rounded bg-white shadow relative w-full mt-6">
       {isReplying ? (
-        <ReplyForm email={data} onClose={onClose} />
+        <ReplyForm
+          email={data}
+          onClose={onClose}
+          setCurrentView={setCurrentView} // Pass the function here
+        />
       ) : (
         <>
           <div className="flex items-center justify-between mb-4">
@@ -63,6 +73,7 @@ function EmailDetails({ id, onClose, onArchive, showArchiveButton = true }) {
             {showArchiveButton && (
               <ToggleArchiveButton
                 emailId={id}
+                setCurrentView={setCurrentView}
                 isArchived={data.archived}
                 onToggle={() => {
                   onArchive();

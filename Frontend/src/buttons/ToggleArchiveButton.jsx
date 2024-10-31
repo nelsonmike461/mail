@@ -1,6 +1,11 @@
 import React from "react";
 
-function ToggleArchiveButton({ emailId, isArchived, onToggle }) {
+function ToggleArchiveButton({
+  emailId,
+  isArchived,
+  onToggle,
+  setCurrentView,
+}) {
   const handleToggleArchive = async () => {
     try {
       const authToken = JSON.parse(localStorage.getItem("authTokens"));
@@ -15,6 +20,7 @@ function ToggleArchiveButton({ emailId, isArchived, onToggle }) {
         body: JSON.stringify({ archived: !isArchived }),
       });
       onToggle();
+      setCurrentView("archive");
     } catch (err) {
       console.error("Error toggling email archive state:", err);
     }

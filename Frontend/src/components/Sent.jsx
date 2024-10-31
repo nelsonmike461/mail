@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import EmailDetails from "./EmailDetails";
 
-function Sent() {
+function Sent({ setCurrentView }) {
   const [emails, setEmails] = useState([]);
   const [error, setError] = useState(null);
   const [selectedEmailId, setSelectedEmailId] = useState(null);
@@ -59,6 +59,7 @@ function Sent() {
           id={selectedEmailId}
           onClose={handleCloseDetails}
           showArchiveButton={false}
+          setCurrentView={setCurrentView}
         />
       ) : (
         <div className="w-full max-w-xl p-4 space-y-2">

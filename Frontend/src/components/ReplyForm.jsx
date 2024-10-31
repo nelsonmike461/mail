@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 
-function ReplyForm({ email, onClose }) {
+function ReplyForm({ email, onClose, setCurrentView }) {
   const [recipients, setRecipients] = useState("");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Pre-fill the form fields
     if (email) {
       setRecipients(email.sender);
       setSubject(
@@ -31,7 +30,6 @@ function ReplyForm({ email, onClose }) {
       const authToken = JSON.parse(localStorage.getItem("authTokens"));
       const token = authToken.access;
 
-
       const response = await fetch(`http://127.0.0.1:8000/api/compose/`, {
         method: "POST",
         headers: {
@@ -45,8 +43,10 @@ function ReplyForm({ email, onClose }) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Mail Not Sent");
       }
+
       console.log("Reply sent successfully!");
       onClose();
+      setCurrentView("sent");
     } catch (err) {
       setError(err.message);
       console.error("Error:", err);

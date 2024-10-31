@@ -13,15 +13,15 @@ function HomePage() {
   const renderView = () => {
     switch (currentView) {
       case "inbox":
-        return <Inbox />;
+        return <Inbox setCurrentView={setCurrentView} />;
       case "sent":
-        return <Sent />;
+        return <Sent setCurrentView={setCurrentView} />;
       case "archive":
         return <Archive setCurrentView={setCurrentView} />;
       case "compose":
         return <ComposeForm setCurrentView={setCurrentView} />;
       default:
-        return <Inbox />;
+        return <Inbox setCurrentView={setCurrentView} />;
     }
   };
 

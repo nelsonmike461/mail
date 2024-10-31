@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import EmailDetails from "./EmailDetails";
 
-function Inbox() {
+function Inbox({ setCurrentView }) {
   const [emails, setEmails] = useState([]);
   const [error, setError] = useState(null);
   const [selectedEmailId, setSelectedEmailId] = useState(null);
@@ -85,6 +85,7 @@ function Inbox() {
       {selectedEmailId ? (
         <EmailDetails
           id={selectedEmailId}
+          setCurrentView={setCurrentView}
           onClose={handleCloseDetails}
           onArchive={() => handleArchive(selectedEmailId)}
         />

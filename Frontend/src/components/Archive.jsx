@@ -36,12 +36,12 @@ function Archive({ setCurrentView }) {
     setSelectedEmailId(id);
   };
 
-  const handleUnarchiveEmail = async (id) => {
+  const handleUnarchiveEmail = async (emailId) => {
     const authToken = JSON.parse(localStorage.getItem("authTokens"));
     const token = authToken.access;
 
     try {
-      await fetch(`http://127.0.0.1:8000/api/emails/${id}/`, {
+      await fetch(`http://127.0.0.1:8000/api/emails/${emailId}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -78,6 +78,7 @@ function Archive({ setCurrentView }) {
           id={selectedEmailId}
           onClose={handleCloseDetails}
           onArchive={() => handleUnarchiveEmail(selectedEmailId)}
+          setCurrentView={setCurrentView}
         />
       ) : (
         <div className="w-full max-w-xl p-4 space-y-2">
