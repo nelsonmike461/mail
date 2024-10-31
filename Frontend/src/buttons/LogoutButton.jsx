@@ -1,13 +1,15 @@
-import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../context/AuthProvider";
+import { useContext } from "react";
 
 const LogoutButton = () => {
-  const { logout } = useAuth();
+  const { logoutUser } = useContext(AuthContext); // Change here
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      const refreshToken = localStorage.getItem("refreshToken");
+      const authToken = JSON.parse(localStorage.getItem("authTokens"));
+      const refreshToken = authToken.refresh;
 
       const response = await fetch("http://127.0.0.1:8000/api/logout/", {
         method: "POST",
@@ -22,7 +24,7 @@ const LogoutButton = () => {
         throw new Error(errorData.error || "Logout failed");
       }
 
-      logout();
+      logoutUser(); // Use logoutUser instead
 
       navigate("/login");
     } catch (err) {
@@ -32,7 +34,7 @@ const LogoutButton = () => {
   };
 
   return (
-    <button className="pr-2  hover:text-red-500" onClick={handleLogout}>
+    <button className="pr-2 hover:text-red-500" onClick={handleLogout}>
       Logout
     </button>
   );

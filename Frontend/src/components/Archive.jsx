@@ -8,7 +8,8 @@ function Archive({ setCurrentView }) {
 
   const fetchEmails = async () => {
     try {
-      const token = localStorage.getItem("accessToken");
+      const authToken = JSON.parse(localStorage.getItem("authTokens"));
+      const token = authToken.access;
 
       const response = await fetch(`http://127.0.0.1:8000/api/emails/archive`, {
         method: "GET",
@@ -36,7 +37,9 @@ function Archive({ setCurrentView }) {
   };
 
   const handleUnarchiveEmail = async (id) => {
-    const token = localStorage.getItem("accessToken");
+    const authToken = JSON.parse(localStorage.getItem("authTokens"));
+    const token = authToken.access;
+
     try {
       await fetch(`http://127.0.0.1:8000/api/emails/${id}/`, {
         method: "PUT",

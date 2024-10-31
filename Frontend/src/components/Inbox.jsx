@@ -8,7 +8,8 @@ function Inbox() {
 
   const fetchEmails = async () => {
     try {
-      const token = localStorage.getItem("accessToken");
+      const authToken = JSON.parse(localStorage.getItem("authTokens"));
+      const token = authToken.access;
 
       const response = await fetch(`http://127.0.0.1:8000/api/emails/inbox`, {
         method: "GET",
@@ -35,7 +36,8 @@ function Inbox() {
     setSelectedEmailId(id);
 
     try {
-      const token = localStorage.getItem("accessToken");
+      const authToken = JSON.parse(localStorage.getItem("authTokens"));
+      const token = authToken.access;
 
       await fetch(`http://127.0.0.1:8000/api/emails/${id}`, {
         method: "PUT",
@@ -69,9 +71,9 @@ function Inbox() {
   useEffect(() => {
     fetchEmails(); // Initial fetch
 
-    const intervalId = setInterval(fetchEmails, 5000); // Fetch emails every 10 seconds
+    //   const intervalId = setInterval(fetchEmails, 5000); // Fetch emails every 10 seconds
 
-    return () => clearInterval(intervalId); // Clean up on unmount
+    //   return () => clearInterval(intervalId); // Clean up on unmount
   }, []);
 
   if (error) {

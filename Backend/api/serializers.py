@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
 from django.contrib.auth import get_user_model
 from .models import Email
 
@@ -18,15 +20,15 @@ class UserSerializer(serializers.ModelSerializer):
         )
         return user
 
-
-class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    password = serializers.CharField(write_only=True)
-
+class LoginSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['email'] = user.email  # Add email to token payload
+        return token
 
 class LogoutSerializer(serializers.Serializer):
     refresh = serializers.CharField()
-
 
 class EmailSerializer(serializers.ModelSerializer):
     sender = serializers.EmailField(source='sender.email')

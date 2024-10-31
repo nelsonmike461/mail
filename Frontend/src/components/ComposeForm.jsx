@@ -1,30 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import AuthContext from "../context/AuthProvider";
 
 function ComposeForm({ setCurrentView }) {
+  const { user } = useContext(AuthContext);
+
   const [recipients, setRecipients] = useState("");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [error, setError] = useState(null);
   const [from, setFrom] = useState("");
 
-  const navigate = useNavigate();
-
   useEffect(() => {
-    const userEmail = localStorage.getItem("userEmail");
-    if (userEmail) {
-      setFrom(userEmail);
-    } else {
-      setError("User email not found. Please log in again.");
+    if (user) {
+      setFrom(user.email);
     }
-  }, []);
+  }, [user]);
 
   const sendMail = async (e) => {
     e.preventDefault();
     setError(null);
 
     try {
-      const token = localStorage.getItem("accessToken");
+      const authToken = JSON.parse(localStorage.getItem("authTokens"));
+      const token = authToken.access;
 
       const response = await fetch(`http://127.0.0.1:8000/api/compose/`, {
         method: "POST",
@@ -105,7 +103,7 @@ function ComposeForm({ setCurrentView }) {
               value={body}
               onChange={(e) => setBody(e.target.value)}
               required
-              className="w-full border border-gray-300 p-2 rounded h-32 text-sm" // Set a specific height for the textarea
+              className="w-full border border-gray-300 p-2 rounded h-32 text-sm"
             />
           </div>
           <button
@@ -114,7 +112,7 @@ function ComposeForm({ setCurrentView }) {
           >
             Send
           </button>
-          {error && <p className="text-red-500 mt-2">{error}</p>}{" "}
+          {error && <p className="text-red-500 mt-2">{error}</p>}
         </fieldset>
       </form>
     </div>

@@ -1,47 +1,26 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthProvider";
-import { Link } from "react-router-dom"; // Import Link
+import React, { useContext, useState } from "react";
+import AuthContext from "../context/AuthProvider";
+import { Link } from "react-router-dom";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  let { loginUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { login } = useAuth();
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    setLoading(true);
+    setLoading(true); // Set loading state
+    setError(null); // Clear previous error
 
-    try {
-      const response = await fetch(`http://127.0.0.1:8000/api/login/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+    // Call loginUser and pass the event
+    const response = await loginUser(e);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Login failed");
-      }
-
-      const data = await response.json();
-      localStorage.setItem("accessToken", data.access);
-      localStorage.setItem("refreshToken", data.refresh);
-      localStorage.setItem("userEmail", email);
-      login();
-      navigate("/");
-    } catch (err) {
-      setError(err.message);
-      console.error("Error:", err);
-    } finally {
-      setLoading(false);
+    // Handle login response if needed
+    if (response.error) {
+      setError(response.error); // Set error state if login fails
     }
+
+    setLoading(false); // Reset loading state
   };
 
   return (
@@ -59,12 +38,8 @@ function Login() {
             </label>
             <input
               type="email"
-              id="email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setError(null);
-              }}
+              name="email"
+              placeholder="Email"
               required
               className="border border-gray-300 p-2 w-full rounded"
             />
@@ -75,12 +50,8 @@ function Login() {
             </label>
             <input
               type="password"
-              id="password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                setError(null);
-              }}
+              name="password"
+              placeholder="Password"
               required
               className="border border-gray-300 p-2 w-full rounded"
             />

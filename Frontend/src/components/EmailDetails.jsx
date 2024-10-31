@@ -9,7 +9,9 @@ function EmailDetails({ id, onClose, onArchive, showArchiveButton = true }) {
 
   const fetchDetails = async () => {
     try {
-      const token = localStorage.getItem("accessToken");
+      const authToken = JSON.parse(localStorage.getItem("authTokens"));
+      const token = authToken.access;
+
       const response = await fetch(`http://127.0.0.1:8000/api/emails/${id}`, {
         method: "GET",
         headers: {

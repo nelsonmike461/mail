@@ -3,7 +3,9 @@ import React from "react";
 function ToggleArchiveButton({ emailId, isArchived, onToggle }) {
   const handleToggleArchive = async () => {
     try {
-      const token = localStorage.getItem("accessToken");
+      const authToken = JSON.parse(localStorage.getItem("authTokens"));
+      const token = authToken.access;
+
       await fetch(`http://127.0.0.1:8000/api/emails/${emailId}`, {
         method: "PUT",
         headers: {

@@ -8,7 +8,8 @@ function Sent() {
 
   const fetchEmails = async () => {
     try {
-      const token = localStorage.getItem("accessToken");
+      const authToken = JSON.parse(localStorage.getItem("authTokens"));
+      const token = authToken.access;
 
       if (!token) {
         throw new Error("Access token is missing");
@@ -45,10 +46,6 @@ function Sent() {
 
   useEffect(() => {
     fetchEmails();
-
-    const intervalId = setInterval(fetchEmails, 5000);
-
-    return () => clearInterval(intervalId);
   }, []);
 
   if (error) {
