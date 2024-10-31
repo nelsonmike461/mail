@@ -3,7 +3,7 @@ import LogoutButton from "../buttons/LogoutButton";
 import AuthContext from "../context/AuthProvider";
 
 function Header() {
-  const { user } = useContext(AuthContext); // Get user from context
+  const { user } = useContext(AuthContext);
 
   return (
     <header className="flex justify-between items-center p-4 bg-gray-100 shadow">

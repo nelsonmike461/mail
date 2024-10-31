@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom"; // Import Link
+import { Link } from "react-router-dom";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -8,6 +8,7 @@ function Register() {
   const [confirmation, setConfirmation] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -54,6 +55,7 @@ function Register() {
             <input
               type="email"
               id="email"
+              placeholder="Email"
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -70,6 +72,7 @@ function Register() {
             <input
               type="password"
               id="password"
+              placeholder="Password"
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
@@ -86,6 +89,7 @@ function Register() {
             <input
               type="password"
               id="confirmation"
+              placeholder="Confirm Password"
               value={confirmation}
               onChange={(e) => {
                 setConfirmation(e.target.value);

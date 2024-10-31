@@ -23,8 +23,6 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route path="login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
           <Route
             path="/inbox"
             element={
@@ -57,6 +55,8 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route path="login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </AuthProvider>
     </Router>

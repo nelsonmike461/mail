@@ -59,7 +59,7 @@ function EmailDetails({
         <ReplyForm
           email={data}
           onClose={onClose}
-          setCurrentView={setCurrentView} // Pass the function here
+          setCurrentView={setCurrentView}
         />
       ) : (
         <>

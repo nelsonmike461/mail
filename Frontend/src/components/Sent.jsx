@@ -46,6 +46,8 @@ function Sent({ setCurrentView }) {
 
   useEffect(() => {
     fetchEmails();
+    const intervalId = setInterval(fetchEmails, 5000);
+    return () => clearInterval(intervalId);
   }, []);
 
   if (error) {

@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   let loginUser = async (e) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
     let response = await fetch("http://127.0.0.1:8000/api/login/", {
       method: "POST",
       headers: {
@@ -41,9 +41,9 @@ export const AuthProvider = ({ children }) => {
       setUser(jwtDecode(data.access));
       localStorage.setItem("authTokens", JSON.stringify(data));
       navigate("/");
-      return { success: true }; // Indicate success
+      return { success: true };
     } else {
-      return { error: "Login failed. Please check your credentials." }; // Ensure this returns an object
+      return { error: "Login failed. Please check your credentials." };
     }
   };
 
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   let updateToken = async () => {
-    if (!authTokens || !authTokens.refresh) return; // Add this check
+    if (!authTokens || !authTokens.refresh) return;
 
     let response = await fetch("http://127.0.0.1:8000/api/token/refresh/", {
       method: "POST",
@@ -90,7 +90,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initToken = async () => {
       await updateToken();
-      setLoading(false); // Move this here
+      setLoading(false);
     };
 
     if (loading) {

@@ -50,7 +50,6 @@ function Archive({ setCurrentView }) {
         body: JSON.stringify({ archived: false }),
       });
 
-      // Remove from local state
       setEmails((prevEmails) => prevEmails.filter((email) => email.id !== id));
       handleCloseDetails();
       setCurrentView("inbox");

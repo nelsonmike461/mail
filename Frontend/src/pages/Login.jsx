@@ -17,18 +17,16 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading state
-    setError(null); // Clear previous error
+    setLoading(true);
+    setError(null);
 
-    // Call loginUser and pass the event
     const response = await loginUser(e);
 
-    // Handle login response if needed
     if (response.error) {
-      setError(response.error); // Set error state if login fails
+      setError(response.error);
     }
 
-    setLoading(false); // Reset loading state
+    setLoading(false);
   };
 
   return (

@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db.models import Q
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
 from .models import Email
 from .serializers import UserSerializer, EmailSerializer, LogoutSerializer, LoginSerializer
@@ -33,6 +33,7 @@ class EmailDetailView(APIView):
             email.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({'error': 'Email not found.'}, status=status.HTTP_404_NOT_FOUND)
+
 
 class ComposeEmailView(APIView):
     permission_classes = [IsAuthenticated]
@@ -71,6 +72,7 @@ class ComposeEmailView(APIView):
         serializer = EmailSerializer(email)
         return Response({'message': 'Email sent successfully.', 'emails': serializer.data}, status=status.HTTP_201_CREATED)
 
+
 class MailBoxView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -87,8 +89,10 @@ class MailBoxView(APIView):
         serializer = EmailSerializer(emails, many=True)
         return Response(serializer.data)
 
+
 class LoginView(TokenObtainPairView):
     serializer_class = LoginSerializer
+
 
 class LogoutView(APIView):
     def post(self, request):
@@ -98,6 +102,7 @@ class LogoutView(APIView):
             RefreshToken(token).blacklist()  # Blacklist the token
             return Response({"message": "Logout successful."}, status=status.HTTP_200_OK)
         return Response({"error": "Refresh token required."}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class RegisterView(APIView):
     def post(self, request):
@@ -117,6 +122,6 @@ class RegisterView(APIView):
             return Response({"message": "User registered successfully."}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class CustomTokenRefreshView(TokenRefreshView):
-    pass  # Use the default behavior
+
+
 

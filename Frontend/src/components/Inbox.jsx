@@ -48,7 +48,6 @@ function Inbox({ setCurrentView }) {
         body: JSON.stringify({ read: true }),
       });
 
-      // Update local state to reflect the read status
       setEmails((prevEmails) =>
         prevEmails.map((email) =>
           email.id === id ? { ...email, read: true } : email
@@ -69,11 +68,9 @@ function Inbox({ setCurrentView }) {
   };
 
   useEffect(() => {
-    fetchEmails(); // Initial fetch
-
-    //   const intervalId = setInterval(fetchEmails, 5000); // Fetch emails every 10 seconds
-
-    //   return () => clearInterval(intervalId); // Clean up on unmount
+    fetchEmails();
+    const intervalId = setInterval(fetchEmails, 5000);
+    return () => clearInterval(intervalId);
   }, []);
 
   if (error) {

@@ -38,7 +38,7 @@ function ComposeForm({ setCurrentView }) {
         throw new Error(errorData.error || "Mail Not Sent");
       }
       console.log("Mail sent successfully!");
-      // Clear the form after sending
+
       setRecipients("");
       setSubject("");
       setBody("");

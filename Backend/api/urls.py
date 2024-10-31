@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import LoginView, LogoutView, RegisterView, TokenRefreshView,MailBoxView, ComposeEmailView, EmailDetailView
+from rest_framework_simplejwt.views import (TokenRefreshView)
 
 urlpatterns = [
     path('emails/<int:email_id>', EmailDetailView.as_view(), name='email'),

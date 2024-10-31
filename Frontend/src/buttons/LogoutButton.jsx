@@ -3,7 +3,7 @@ import AuthContext from "../context/AuthProvider";
 import { useContext } from "react";
 
 const LogoutButton = () => {
-  const { logoutUser } = useContext(AuthContext); // Change here
+  const { logoutUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -24,7 +24,7 @@ const LogoutButton = () => {
         throw new Error(errorData.error || "Logout failed");
       }
 
-      logoutUser(); // Use logoutUser instead
+      logoutUser();
 
       navigate("/login");
     } catch (err) {
