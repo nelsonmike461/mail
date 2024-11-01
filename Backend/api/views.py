@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from .models import Email
 from .serializers import UserSerializer, EmailSerializer, LogoutSerializer, LoginSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenObtainPairView
 import json
 
 User = get_user_model()
