@@ -14,13 +14,13 @@ class CustomUserManager(BaseUserManager):
 
     def create_superuser(self, email, password=None, **extra_fields):
         """Create and return a superuser with the given email and password."""
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
 
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
 
         return self.create_user(email, password, **extra_fields)
 
@@ -29,7 +29,7 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True)
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []  # No other required fields
 
     objects = CustomUserManager()
@@ -37,7 +37,9 @@ class User(AbstractUser):
 
 class Email(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="emails")
-    sender = models.ForeignKey(User, on_delete=models.PROTECT, related_name="emails_sent")
+    sender = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="emails_sent"
+    )
     recipients = models.ManyToManyField(User, related_name="emails_received")
     subject = models.CharField(max_length=255)
     body = models.TextField(blank=True)
