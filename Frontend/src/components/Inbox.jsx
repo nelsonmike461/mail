@@ -67,10 +67,13 @@ function Inbox({ setCurrentView }) {
     handleCloseDetails();
   };
 
+  // useEffect(() => {
+  //   fetchEmails();
+  //   const intervalId = setInterval(fetchEmails, 5000);
+  //   return () => clearInterval(intervalId);
+  // }, []);
   useEffect(() => {
     fetchEmails();
-    const intervalId = setInterval(fetchEmails, 5000);
-    return () => clearInterval(intervalId);
   }, []);
 
   if (error) {
